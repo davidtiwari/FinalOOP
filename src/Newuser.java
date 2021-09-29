@@ -1,7 +1,19 @@
+
+import java.lang.System.Logger;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
+package StudentManagement;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionpane;
 
 /**
  *
@@ -15,6 +27,9 @@ public class Newuser extends javax.swing.JFrame {
     public Newuser() {
         initComponents();
     }
+    
+ Connection con;
+ PreparedStatement pst;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,6 +69,11 @@ public class Newuser extends javax.swing.JFrame {
         txttype.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "user", "admin" }));
 
         jButton2.setText("Add");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Cancel");
 
@@ -119,6 +139,57 @@ public class Newuser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        if (txtuser.getText().length() ==0)
+        {
+            JOptionPane.showMessageDialog(this,"please type the user name");
+        }
+        else if(txtPass.getText().length() == 0);
+        {
+           JOptionPane.showMessageDialog(this,"please type the password"); 
+        }
+        else if(txtPass.getText().equals(txtConfirm.getText())== false)
+                {
+                JOptionPane.showMessageDialog(this,"password not matched");
+                }
+        else
+                {
+                try {
+                    
+                    String username = txtuser.getText();
+                    String confirmpass  = txtConfirm.getText();
+                    String usertype = txttype.getSelectedItem().toString;
+                    
+                    
+                    
+                Class.forName("com.mysql.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost/studentmanagementsystem","root","");
+                pst = con.PreparedStatement("insert into student(username,password,utype)values(?,?,?)");
+                pst.setString(1, username);
+                pst.setString(2, confirmpass);
+                pst.setString(3, usertype);
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(null, "User Created......");
+                txtuser.setText("");
+                txtPass.setText("");
+                txtConfirm.setText("");
+                txttype.setSelectedIndex(-1);
+                txtuser.requestFocus();
+                
+                
+                
+                
+                
+                }catch (ClassNotFoundException ex) {
+                   Logger.getLogger(NewUser.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(NewUser.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -149,7 +220,7 @@ public class Newuser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Newuser().setVisible(true);
+               new  NewUser().setVisible(true);
             }
         });
     }
@@ -169,4 +240,18 @@ public class Newuser extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> txttype;
     private javax.swing.JTextField txtuser;
     // End of variables declaration//GEN-END:variables
+
+    private static class Connection {
+
+        public Connection() {
+        }
+    }
+
+    private static class NewUser {
+
+        public NewUser() {
+        }
+
+       
+    }
 }
